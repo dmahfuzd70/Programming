@@ -31,37 +31,37 @@ class, child class doesn't require to take any
 permission from the parent class.
 
 
-    using System;
+            using System;
 
-    namespace ProgramPractice
-    {
-    class LoadParent
-    {
-      public void Show()
-      {
-       Console.WriteLine("Parent's Show Method is Called.");
-      }
-      public void Test()
-      {
-       Console.WriteLine("Parent's Test Method is Called.");
-      }
-    }
-    class LoadChild:LoadParent
-    {
+            namespace ProgramPractice
+            {
+            class LoadParent
+            {
+              public void Show()
+              {
+               Console.WriteLine("Parent's Show Method is Called.");
+              }
+              public void Test()
+              {
+               Console.WriteLine("Parent's Test Method is Called.");
+              }
+            }
+            class LoadChild:LoadParent
+            {
 
-      public void Show(int i)
-      {
-       Console.WriteLine("Child;s Show Method is Called.");
-      }
-       static void Main(string args)
-       {
-        LoadChild c = new LoadChild();
-        c.Show();
-        c.Show(10);
-        c.Test();	
-       }
-    }
-    }  	
+              public void Show(int i)
+              {
+               Console.WriteLine("Child;s Show Method is Called.");
+              }
+               static void Main(string args)
+               {
+                LoadChild c = new LoadChild();
+                c.Show();
+                c.Show(10);
+                c.Test();	
+               }
+            }
+            }  	
 
 
 
