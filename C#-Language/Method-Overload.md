@@ -1,6 +1,6 @@
 ### Method Overloading:
 
-Method overloading is a approach of defining multiple behaviour
+Method overloading is a approach of defining multiple behavior
 of method. 
 
 In method overloading output can change depand on input. Input 
