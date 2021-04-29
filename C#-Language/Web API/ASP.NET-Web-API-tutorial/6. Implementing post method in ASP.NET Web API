@@ -1,0 +1,24 @@
+### Implementing post method in ASP.NET Web API 
+
+In this video we will discuss implementing POST method in ASP.NET Web API. Post allows us to create a new item. 
+
+
+We want to add a new Employee to the Employees table. Include the following Post() method in EmployeesController. Notice the Employee object is being passed as parameter to the Post method. The Employee parameter is decorated with [FromBody] attribute. This tells Web API to get employee data from the request body.
+
+public void Post([FromBody] Employee employee)
+{
+    using (EmployeeDBEntities entities = new EmployeeDBEntities())
+    {
+        entities.Employees.Add(employee);
+        entities.SaveChanges();
+    }
+}
+
+At this point build the solution. Fireup Fiddler and issue a Post request
+
+    Set the HTTP verb to POST
+    Content-Type: application/json. This tells that we are sending JSON formatted data to the server
+    In the Request Body, include the employee object that you want to add to the database in JSON format
+    Finally click execute
+
+ <img src="https://github.com/dmahfuzd70/Programming/blob/main/C%23-Language/Web%20API/ASP.NET-Web-API-tutorial/Images/4.png" alt="Web API Directory" width="521" height="399">
