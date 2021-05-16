@@ -5,6 +5,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Net.Http;
+    using System.Text;
     using System.Web;
     using System.Web.Mvc;
     using WebApiProject.Models;
@@ -34,6 +35,64 @@
                 }
                 return View(modelList);
             }
+
+            public ActionResult Create()
+            {
+                return View();
+            }
+
+            [HttpPost]
+
+            public ActionResult Create(Employee model)
+            {
+                string data = JsonConvert.SerializeObject(model);
+                StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = client.PostAsync(client.BaseAddress + "/Employees", content).Result;
+                if(response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("Index");
+                }
+                return View();
+            }
+
+            public ActionResult Edit(int id)
+            {
+                Employee model = new Employee();
+                HttpResponseMessage response = client.GetAsync(client.BaseAddress + "/Employees"+id).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    string data = response.Content.ReadAsStringAsync().Result;
+                    model = JsonConvert.DeserializeObject<Employee>(data);
+                }
+                return View("Create",model);
+            }
+
+            [HttpPost]
+
+            public ActionResult Edit(Employee model)
+            {
+                string data = JsonConvert.SerializeObject(model);
+                StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = client.PutAsync(client.BaseAddress + "/Employees/"+model.ID, content).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("Index");
+                }
+                return View("Create", model);
+            }
+
+            public ActionResult Delete(int id)
+            {
+                HttpResponseMessage response = client.DeleteAsync(client.BaseAddress + "/Employees" + id).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("Index");
+                }
+                return RedirectToAction("Index");
+            }
+
         }
     }
     
@@ -55,7 +114,7 @@
     }
 
     
-### View
+### Index
  
     @model IEnumerable<WebApiProject.Models.Employee>
 
@@ -95,12 +154,73 @@
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-                @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+                @Html.ActionLink("Delete", "Delete", new { id=item.ID }, new { onclick="return confirm('Are you sure to delete ')" })
             </td>
         </tr>
     }
 
     </table>
+
+    
+### Create
+
+    @model WebApiProject.Models.Employee
+
+
+    @using (Html.BeginForm()) 
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <h4>Employee</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Gender, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Salary, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Salary, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Salary, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Create" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    }
+
+
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }
+
+
     
 Content Source: https://www.youtube.com/watch?v=iaeHaydhatE&t=8s    
